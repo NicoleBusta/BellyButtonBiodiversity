@@ -17,7 +17,7 @@ function createGaugeChart(sample) {
         // Use Object. to get key/value pairs
         let washFrequency = Object.values(valueData)[6];
         
-        // Set trace for gauge chart
+        // Set the trace for gauge chart
         let trace2 = {
             domain: {x: [0,1], y: [0,1]},
             value: washFrequency,
