@@ -9,19 +9,14 @@ d3.json(url).then(function(data) {
 // Initialize the dashboard at start up 
 function init() {
 
-    // Use D3 to select the dropdown menu
+    // Use D3 to select the dropdown menu and get sample data to add to drop-down
     let dropdownMenu = d3.select("#selDataset");
-
-    // Use D3 to get sample names and populate the drop-down selector
     d3.json(url).then((data) => {
         
-        // Set a variable for the sample names
         let names = data.names;
-
-        // Add  samples to dropdown menu
         names.forEach((id) => {
 
-            // Log the value of id for each iteration of the loop
+            // Console.log to check id loop
             console.log(id);
 
             dropdownMenu.append("option")
@@ -32,64 +27,55 @@ function init() {
         // Set the first sample from the list
         let sample_one = names[0];
 
-        // Log the value of sample_one
+        // Console.log to check sample_one
         console.log(sample_one);
 
-        // Build the initial plots
-        buildMetadata(sample_one);
-        buildBarChart(sample_one);
-        buildBubbleChart(sample_one);
-        buildGaugeChart(sample_one);
+        // Create initial graphs
+        createMetadata(sample_one);
+        createBarChart(sample_one);
+        createBubbleChart(sample_one);
+        createGaugeChart(sample_one);
 
     });
 };
 
-// Function that populates metadata info
-function buildMetadata(sample) {
+// Function that creates metadata
+function createMetadata(sample) {
 
-    // Use D3 to retrieve all of the data
+    // Use D3 to retrieve data
     d3.json(url).then((data) => {
-
-        // Retrieve all metadata
         let metadata = data.metadata;
 
-        // Filter based on the value of the sample
+        // Filter based on sample value
         let value = metadata.filter(result => result.id == sample);
 
-        // Log the array of metadata objects after the have been filtered
+        // Console.log to check data
         console.log(value)
 
-        // Get the first index from the array
+        // Get the first index
         let valueData = value[0];
 
         // Clear out metadata
         d3.select("#sample-metadata").html("");
 
-        // Use Object.entries to add each key/value pair to the panel
+        // Use Object.entries to add each key/value pair to the visual
         Object.entries(valueData).forEach(([key,value]) => {
-
-            // Log the individual key/value pairs as they are being appended to the metadata panel
-            console.log(key,value);
-
             d3.select("#sample-metadata").append("h5").text(`${key}: ${value}`);
         });
     });
-
 };
 
-// Function that builds the bar chart
-function buildBarChart(sample) {
+// Create bar chart
+function createBarChart(sample) {
 
-    // Use D3 to retrieve all of the data
+    // Use D3 to retrieve data
     d3.json(url).then((data) => {
-
-        // Retrieve all sample data
         let sampleInfo = data.samples;
 
-        // Filter based on the value of the sample
+        // Filter based on sample value
         let value = sampleInfo.filter(result => result.id == sample);
 
-        // Get the first index from the array
+        // Get the first index
         let valueData = value[0];
 
         // Get the otu_ids, lables, and sample values
@@ -97,10 +83,10 @@ function buildBarChart(sample) {
         let otu_labels = valueData.otu_labels;
         let sample_values = valueData.sample_values;
 
-        // Log the data to the console
+        // Console.log to check data
         console.log(otu_ids,otu_labels,sample_values);
 
-        // Set top ten items to display in descending order
+        // Set top ten to display in descending order
         let yticks = otu_ids.slice(0,10).map(id => `OTU ${id}`).reverse();
         let xticks = sample_values.slice(0,10).reverse();
         let labels = otu_labels.slice(0,10).reverse();
@@ -114,38 +100,36 @@ function buildBarChart(sample) {
             orientation: "h"
         };
 
-        // Setup the layout
+        // Set layout
         let layout = {
-            title: "Top 10 OTUs Present"
+            title: "<b>Top 10 OTUs Present</b>",
+            font: {color: "black", size: 15},
+            width: 450, 
+            height: 400
         };
 
-        // Call Plotly to plot the bar chart
+        // Call Plotly 
         Plotly.newPlot("bar", [trace], layout)
     });
 };
 
-// Function that builds the bubble chart
-function buildBubbleChart(sample) {
+// Create bubble chart
+function createBubbleChart(sample) {
 
     // Use D3 to retrieve all of the data
     d3.json(url).then((data) => {
-        
-        // Retrieve all sample data
         let sampleInfo = data.samples;
 
-        // Filter based on the value of the sample
+        // Filter based on sample value
         let value = sampleInfo.filter(result => result.id == sample);
 
-        // Get the first index from the array
+        // Get the first index
         let valueData = value[0];
 
         // Get the otu_ids, lables, and sample values
         let otu_ids = valueData.otu_ids;
         let otu_labels = valueData.otu_labels;
         let sample_values = valueData.sample_values;
-
-        // Log the data to the console
-        console.log(otu_ids,otu_labels,sample_values);
         
         // Set up the trace for bubble chart
         let trace1 = {
@@ -160,29 +144,32 @@ function buildBubbleChart(sample) {
             }
         };
 
-        // Set up the layout
+        // Set layout
         let layout = {
-            title: "Bacteria Per Sample",
+            title: "<b>Bacteria Per Sample</b>",
+            font: {color: "black", size: 15},
             hovermode: "closest",
             xaxis: {title: "OTU ID"},
+            yaxis: {title: "Sample Values"}
         };
 
-        // Call Plotly to plot the bubble chart
+        // Call Plotly
         Plotly.newPlot("bubble", [trace1], layout)
     });
 };
 
-// Function that updates dashboard when sample is changed
+
+// Create function to update dashboard when test subject changed
 function optionChanged(value) { 
 
     // Log the new value
     console.log(value); 
 
     // Call all functions 
-    buildMetadata(value);
-    buildBarChart(value);
-    buildBubbleChart(value);
-    buildGaugeChart(value);
+    createMetadata(value);
+    createBarChart(value);
+    createBubbleChart(value);
+    createGaugeChart(value);
 };
 
 // Call the initialize function
