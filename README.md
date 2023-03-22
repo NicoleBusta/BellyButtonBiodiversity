@@ -1,7 +1,7 @@
 # Belly Button Biodiversity
-
+<center>
 <img src = "images/BBBacteria.jpg">
-<br>
+</center>
 
 # Dashboard
 <a href="https://nicolebusta.github.io/BellyButtonBiodiversity/" target_="blank"> Belly Button Biodiversity Dashboard </a>
