@@ -1,7 +1,6 @@
 # Belly Button Biodiversity
-<center>
-<img src = "images/BBBacteria.jpg" height="200" width="300">
-</center>
+
+<img src = "images/BBBacteria.jpg">
 <br>
 
 # Dashboard
